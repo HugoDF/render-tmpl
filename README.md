@@ -1,13 +1,91 @@
-# [Project Name]
+# `render-tmpl`
 
-Boilerplate repo with:
+Use `<template>` as a rendering engine in < 100 lines of code
 
-- MIT License
-- Node, npm
-- tests with the `node:test` built-in
-- formatting with prettier
-- GitHub Actions on commit and to auto-publish on GH release
-  - **note**: for publish to work, `NPM_TOKEN` has to be set in the repository GH Actions secrets
+- Alpine/Vue-like directive notation `data-s-{text,attr,show}` for use with `<template>` elements.
+- No reactivity, pairs well with web components/custom elements.
+- copy-paste onto your page (< 100 lines of code **@todo** link to unmin.js file) or ESM import (858B minified, ??B brotlied, ??B gzipped).
+
+## Quickstart
+
+```html
+<template data-s-tmpl="tmpl">
+  <div data-s-text="greeting"></div>
+  <img data-s-attr="src=url,alt=greeting" />
+</template>
+<script type="importmap">
+  { "imports": { "render-tmpl": "https://esm.sh/render-tmpl" } }
+</script>
+<script type="module">
+  import { renderTmpl } from "render-tmpl";
+  document.appendChild(
+    renderTmpl(document.querySelector("[data-s-tmpl=tmpl]"), {
+      greeting: "hello",
+      url: "my-url",
+    }),
+  );
+</script>
+```
+
+## Directives
+
+### `data-s-tmpl`
+
+`data-s-tmpl` is a convention to denote templates that will be used with `render-tmpl`.
+
+Usage: `<template data-s-tmpl="loading"></template>`.
+
+### `data-s-show`
+
+`data-s-show` will set `display: none;` if the expression is false and will unset `display` if it's true.
+
+Usage: `<div data-s-show="isShown"></div>`
+
+Use of negation is allowed with `!`, eg. `<div data-s-show="!isLoading"></div>`, **note**: any arbitrary number of `!` works, but other boolean logic (`&&`, `||`, `()`) will **not work**, this is because the value is not `eval`-ed as JavaScript.
+
+### `data-s-text`
+
+Set the `textContent` of the node to the value of the referenced variable.
+
+Usage: `<p data-s-text="message"></p>`
+
+### `data-s-attr`
+
+Set attributes on the element based on provided key-value `attr1=value1,attr2=value2` pairs.
+
+Aliases: `data-s-attrs`
+
+Usage: `<img data-s-attr="src=url,alt=greeting" />` sets `src` and `alt` attributes to the values contained in `url` and `greeting` variables.
+
+### `data-s-slot`
+
+Used as the element into which sub-templates are injected.
+
+Usage:
+
+```html
+<template data-s-tmpl="tmpl">
+  <div data-s-slot></div>
+  <template data-s-tmpl="no-results">
+    No Results <span data-s-text="requestId"></span>
+  </template>
+</template>
+<script type="module">
+  import { renderTmpl } from "render-tmpl";
+  document.appendChild(
+    renderTmpl(document.querySelector("[data-s-tmpl=tmpl]"), {}, (tmpl) =>
+      renderTmpl(tmpl.querySelector("[data-s-tmpl=no-results]"), {
+        requestId: "1234",
+      }),
+    ),
+  );
+</script>
+```
+
+<!-- @todo
+- `$ctx.query` vs `$state.query` vs `$s.query` vs `$query`?
+- should there be a directive registration system? (would allow for increased modularity)?
+-->
 
 ## Requirements
 

@@ -1,13 +1,40 @@
 {
-  "private": true,
+  "name": "render-tmpl",
+  "version": "0.0.1",
+  "private": false,
   "type": "module",
+  "main": "./render-tmpl.js",
+  "module": "./render-tmpl.js",
+  "sideEffects": false,
   "scripts": {
-    "test": "node --test",
+    "test": "node --test --experimental-test-coverage",
     "lint": "npm run format -- -c",
     "format": "prettier --write './**/*.{js,json,yml,md}'"
   },
+  "homepage": "https://github.com/HugoDF/render-tmpl",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HugoDF/render-tmpl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HugoDF/render-tmpl/issues"
+  },
+  "author": {
+    "name": "HugoDF",
+    "url": "https://codewithhugo.com/about"
+  },
+  "keywords": [
+    "html",
+    "template",
+    "web components",
+    "no build"
+  ],
+  "files": [
+    "./render-tmpl.js"
+  ],
   "license": "MIT",
   "devDependencies": {
-    "prettier": "3.0.3"
+    "linkedom": "0.18.5",
+    "prettier": "3.3.3"
   }
 }
