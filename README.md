@@ -1,5 +1,7 @@
 # `render-tmpl`
 
+![minzip size badge](https://badgen.net/bundlephobia/minzip/render-tmpl)
+
 Use `<template>` as a rendering engine, [< 100 lines of code](./render-tmpl.js).
 
 - Alpine/Vue-like directive notation `data-s-{text,attr,show}` for use with `<template>` elements.
