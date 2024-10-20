@@ -1,6 +1,7 @@
 {
   "name": "render-tmpl",
   "version": "0.0.1",
+  "description": "Use `<template>` as a rendering engine, < 100 lines of code.",
   "private": false,
   "type": "module",
   "main": "./render-tmpl.js",
@@ -9,7 +10,8 @@
   "scripts": {
     "test": "node --test --experimental-test-coverage",
     "lint": "npm run format -- -c",
-    "format": "prettier --write './**/*.{js,json,yml,md}'"
+    "format": "prettier --write './**/*.{js,json,yml,md}'",
+    "check-len": "npx -y esbuild render-tmpl.js | wc -l"
   },
   "homepage": "https://github.com/HugoDF/render-tmpl",
   "repository": {

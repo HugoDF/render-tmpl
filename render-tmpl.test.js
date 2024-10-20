@@ -1,15 +1,14 @@
 import { test } from "node:test";
-import assert from "node:assert/strict";
 import { renderTmpl } from "./render-tmpl.js";
 
 import { parseHTML } from "linkedom";
 
-test("renderTmpl - data-s-state - simple template with state", () => {
+test("renderTmpl - data-s-state - simple template with state", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <div data-s-text="greeting"></div>
   </template>`);
 
-  assert.strictEqual(document.querySelectorAll("template").length, 1);
+  t.assert.strictEqual(document.querySelectorAll("template").length, 1);
 
   document.appendChild(
     renderTmpl(document.querySelector("[data-s-tmpl=tmpl]"), {
@@ -17,16 +16,16 @@ test("renderTmpl - data-s-state - simple template with state", () => {
     }),
   );
 
-  assert.strictEqual(document.querySelector("div").textContent, "hello");
+  t.assert.strictEqual(document.querySelector("div").textContent, "hello");
 });
 
-test("renderTmpl - data-s-attr - setting multiple attributes template with state", () => {
+test("renderTmpl - data-s-attr - setting multiple attributes template with state", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <img data-s-attr="src=url,alt=greeting">
     <img data-s-attrs="src=url,alt=greeting">
   </template>`);
 
-  assert.strictEqual(document.querySelectorAll("template").length, 1);
+  t.assert.strictEqual(document.querySelectorAll("template").length, 1);
 
   document.appendChild(
     renderTmpl(document.querySelector("[data-s-tmpl=tmpl]"), {
@@ -35,13 +34,13 @@ test("renderTmpl - data-s-attr - setting multiple attributes template with state
     }),
   );
 
-  assert.strictEqual(document.querySelector("[data-s-attr]").src, "my-url");
-  assert.strictEqual(document.querySelector("[data-s-attr]").alt, "hello");
-  assert.strictEqual(document.querySelector("[data-s-attrs]").src, "my-url");
-  assert.strictEqual(document.querySelector("[data-s-attrs]").alt, "hello");
+  t.assert.strictEqual(document.querySelector("[data-s-attr]").src, "my-url");
+  t.assert.strictEqual(document.querySelector("[data-s-attr]").alt, "hello");
+  t.assert.strictEqual(document.querySelector("[data-s-attrs]").src, "my-url");
+  t.assert.strictEqual(document.querySelector("[data-s-attrs]").alt, "hello");
 });
 
-test("renderTmpl - data-s-attr - setting input value", () => {
+test("renderTmpl - data-s-attr - setting input value", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <input type="text" data-s-attr="value=greeting" />
   </template>`);
@@ -52,10 +51,10 @@ test("renderTmpl - data-s-attr - setting input value", () => {
     }),
   );
 
-  assert.strictEqual(document.querySelector("input").value, "hello");
+  t.assert.strictEqual(document.querySelector("input").value, "hello");
 });
 
-test("renderTmpl - data-s-show", () => {
+test("renderTmpl - data-s-show", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <div data-testid="output">
       <div data-s-show="truthyVal">truthyVal</div>
@@ -66,7 +65,7 @@ test("renderTmpl - data-s-show", () => {
     </div>
   </template>`);
 
-  assert.strictEqual(document.querySelectorAll("template").length, 1);
+  t.assert.strictEqual(document.querySelectorAll("template").length, 1);
 
   document.appendChild(
     renderTmpl(document.querySelector("[data-s-tmpl=tmpl]"), {
@@ -75,29 +74,29 @@ test("renderTmpl - data-s-show", () => {
     }),
   );
 
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("[data-s-show=truthyVal]").style.display,
     "",
   );
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("[data-s-show=!truthyVal]").style.display,
     "none",
   );
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("[data-s-show=!!truthyVal]").style.display,
     "",
   );
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("[data-s-show=falsyVal]").style.display,
     "none",
   );
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("[data-s-show=!falsyVal]").style.display,
     "",
   );
 });
 
-test("renderTmpl - data-s-slot - nested template with subTmpl parameter", () => {
+test("renderTmpl - data-s-slot - nested template with subTmpl parameter", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <div data-s-slot></div>
     <template data-s-tmpl="no-results">
@@ -116,11 +115,11 @@ test("renderTmpl - data-s-slot - nested template with subTmpl parameter", () => 
     ),
   );
 
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("div[data-s-slot]").textContent.trim(),
     "No Results 1234",
   );
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("div[data-s-slot]").innerHTML.trim(),
     'No Results <span data-s-text="requestId">1234</span>',
   );
@@ -135,7 +134,7 @@ test("renderTmpl - no data-s-slot - nested template with subTmpl parameter", (t)
     </template>
   </template>`);
 
-  assert.throws(() => {
+  t.assert.throws(() => {
     renderTmpl(
       document.querySelector("[data-s-tmpl=tmpl]"),
       { greeting: "hello" },
@@ -146,12 +145,12 @@ test("renderTmpl - no data-s-slot - nested template with subTmpl parameter", (t)
     );
   });
 
-  assert.deepStrictEqual(warnMock.mock.calls[0].arguments, [
+  t.assert.deepStrictEqual(warnMock.mock.calls[0].arguments, [
     "[renderTmpl]: subTmpl used without `data-s-slot` attr in parent template",
   ]);
 });
 
-test("renderTmpl - data-s-slot - nested template with subTmpl outputting list", () => {
+test("renderTmpl - data-s-slot - nested template with subTmpl outputting list", (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="tmpl">
     <div data-s-slot></div>
     <template data-s-tmpl="result-item">
@@ -177,23 +176,23 @@ test("renderTmpl - data-s-slot - nested template with subTmpl outputting list", 
     ),
   );
 
-  assert.strictEqual(
+  t.assert.strictEqual(
     document.querySelector("div[data-s-slot]").childElementCount,
     3,
   );
   document.querySelectorAll("[data-testid=result-item]").forEach((el, i) => {
-    assert.strictEqual(
+    t.assert.strictEqual(
       el.textContent.trim(),
       `Result ref: ${results[i].reference}, id: ${results[i].id}`,
     );
-    assert.strictEqual(
+    t.assert.strictEqual(
       el.innerHTML.trim(),
       `Result ref: <span data-s-text="$ctx.reference">${results[i].reference}</span>, id: <span data-s-text="$ctx.id">${results[i].id}</span>`,
     );
   });
 });
 
-test.skip("renderTmpl - load & display list of posts", async () => {
+test.skip("renderTmpl - load & display list of posts", async (t) => {
   const { document } = parseHTML(`<template data-s-tmpl="posts-list">
     <h2>Posts</h2>
     <div data-s-slot></div>
@@ -241,7 +240,7 @@ test.skip("renderTmpl - load & display list of posts", async () => {
   app.innerHTML = "";
   app.appendChild(render());
 
-  // assert.equal(app.textContent, 'No results');
+  // t.assert.equal(app.textContent, 'No results');
 
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   const data = await res.json();

@@ -1,10 +1,10 @@
 # `render-tmpl`
 
-Use `<template>` as a rendering engine in < 100 lines of code
+Use `<template>` as a rendering engine, [< 100 lines of code](./render-tmpl.js).
 
 - Alpine/Vue-like directive notation `data-s-{text,attr,show}` for use with `<template>` elements.
 - No reactivity, pairs well with web components/custom elements.
-- copy-paste onto your page (< 100 lines of code **@todo** link to unmin.js file) or ESM import (858B minified, ??B brotlied, ??B gzipped).
+- copy-paste onto your page ([< 100 lines of code](./render-tmpl.js) or ESM import).
 
 ## Quickstart
 
